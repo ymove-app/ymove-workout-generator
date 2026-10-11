@@ -1,7 +1,7 @@
 import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ymove } from '../lib/ymove';
+import { apiKey, MISSING_KEY_MESSAGE, ymove } from '../lib/ymove';
 import type { Workout, MuscleGroupSlug, EquipmentSlug, Difficulty } from 'ymove-exercise-api';
 
 interface Props {
@@ -163,6 +163,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) =
     difficulty: (typeof query.difficulty === 'string' ? query.difficulty : 'intermediate') as Difficulty,
     exerciseCount: typeof query.exerciseCount === 'string' ? parseInt(query.exerciseCount, 10) : 6,
   };
+
+  if (!apiKey) {
+    return { props: { workout: null, params, error: MISSING_KEY_MESSAGE } };
+  }
 
   try {
     const workout = await ymove.workouts.generate(params);

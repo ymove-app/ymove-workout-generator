@@ -2,31 +2,29 @@
 
 Workout-of-the-day generator: pick a muscle group + equipment + difficulty, get a structured workout with sets, reps, and rest times. Built on the [ymove Exercise Video API](https://ymove.app/exercise-api).
 
-**Live demo:** _coming with first Vercel deploy_
-
 ## What's in here
 
 - **Next.js 14** + **Tailwind** + **TypeScript**
 - Single page renders the form and the generated workout via `getServerSideProps`
 - **Tabular set/rep table** (Hevy-style) with `tabular-nums` so the numbers line up
-- Uses the official **`ymove-exercise-api`** SDK — `workouts.generate({ muscleGroup, equipment, difficulty, exerciseCount })`
-- Works against the **demo key** by default (10 exercises/month)
+- Uses the official **`ymove-exercise-api`** SDK: `workouts.generate({ muscleGroup, equipment, difficulty, exerciseCount })`
+- Shows a clear message instead of an error when the API key is missing
 
 ## Run locally
 
 ```bash
-git clone https://github.com/ymoveapp/ymove-workout-generator
+git clone https://github.com/ymove-app/ymove-workout-generator
 cd ymove-workout-generator
 npm install
-cp .env.example .env.local      # optional: drop in your real API key
+cp .env.example .env.local      # then set YMOVE_API_KEY
 npm run dev
 ```
 
 Open http://localhost:3000.
 
-## Get a real API key
+## Get an API key
 
-Free trial at [ymove.app/exercise-api/signup](https://ymove.app/exercise-api/signup). No credit card. Drop it in `.env.local`:
+Get a free trial key at [ymove.app/exercise-api/signup](https://ymove.app/exercise-api/signup) and put it in `.env.local`:
 
 ```
 YMOVE_API_KEY=your_key_here
@@ -34,14 +32,14 @@ YMOVE_API_KEY=your_key_here
 
 ## Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fymoveapp%2Fymove-workout-generator&env=YMOVE_API_KEY&envDescription=Get%20a%20free%20trial%20key%20at%20ymove.app/exercise-api/signup&envLink=https%3A%2F%2Fymove.app%2Fexercise-api%2Fsignup)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fymove-app%2Fymove-workout-generator&env=YMOVE_API_KEY&envDescription=Get%20a%20free%20trial%20key%20at%20ymove.app/exercise-api/signup&envLink=https%3A%2F%2Fymove.app%2Fexercise-api%2Fsignup)
 
 ## How it works
 
 ```ts
 import { YMoveClient } from 'ymove-exercise-api';
 
-const ymove = new YMoveClient(process.env.YMOVE_API_KEY || 'demo');
+const ymove = new YMoveClient(process.env.YMOVE_API_KEY ?? '');
 
 const workout = await ymove.workouts.generate({
   muscleGroup: 'chest',
@@ -61,7 +59,7 @@ Hook up the ymove MCP server and ask:
 
 > Add a "save workout" button that calls a /api/save route and stores the workout in localStorage.
 
-Get the MCP config from [github.com/ymoveapp/exercise-api-mcp](https://github.com/ymoveapp/exercise-api-mcp).
+Get the MCP config from [github.com/ymove-app/exercise-api-mcp](https://github.com/ymove-app/exercise-api-mcp).
 
 ## License
 
